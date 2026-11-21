@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RUAS Placements | Directorate of Training and Placement</title>
+  <meta name="description" content="Placement updates, upcoming companies, registration deadlines, online assessments and interviews for RUAS students." />
+  <link rel="stylesheet" href="style.css" />
+  <script src="config.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-in">
+      <div class="brand">
+        <div class="logo">RUAS</div>
+        <div>
+          <div class="uni" id="uniName"></div>
+          <div class="dept" id="deptName"></div>
+        </div>
+      </div>
+      <nav>
+        <a href="#drives">Drives</a>
+        <a href="#schedule">Schedule</a>
+        <a href="#announcements">Announcements</a>
+        <a href="#contact">Contact</a>
+        <button id="btnLogin" class="btn small ghost">Admin login</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ADMIN BAR -->
+  <div id="adminBar" class="adminbar" hidden>
+    <div class="wrap adminbar-in">
+      <span>🔐 Admin mode <b id="adminUser"></b></span>
+      <span id="pending" class="pending"></span>
+      <div class="adminbar-actions">
+        <button id="btnAddCompany" class="btn small">+ Company</button>
+        <button id="btnAddNews" class="btn small">+ Announcement</button>
+        <button id="btnEditStats" class="btn small">Edit stats</button>
+        <button id="btnPublish" class="btn small gold">Publish changes</button>
+        <button id="btnExport" class="btn small ghost">Download data.json</button>
+        <button id="btnLogout" class="btn small ghost">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1 id="season"></h1>
+      <p>Placement updates, upcoming companies, registration deadlines, online assessments and interviews.</p>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section id="announcements" class="block">
+      <h2>Announcements</h2>
+      <div id="newsList" class="news"></div>
+    </section>
+
+    <section id="drives" class="block">
+      <div class="block-head">
+        <h2>Placement drives</h2>
+        <span id="count" class="muted"></span>
+      </div>
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="Search company, role, location…" />
+        <select id="fBranch"><option value="">All branches</option></select>
+        <select id="fType">
+          <option value="">All types</option>
+          <option>Full-time</option><option>Internship</option><option>Internship + Full-time</option>
+        </select>
+      </div>
+      <div class="chips" id="statusChips"></div>
+      <div id="cards" class="cards"></div>
+    </section>
+
+    <section id="schedule" class="block">
+      <h2>Upcoming schedule</h2>
+      <div id="timeline" class="timeline"></div>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div class="wrap foot">
+      <div>
+        <b id="footDept"></b><br />
+        <span id="footUni"></span><br />
+        <span id="footAddr"></span>
+      </div>
+      <div>
+        <span id="footEmail"></span><br />
+        <span id="footPhone"></span><br />
+        <span class="muted" id="updated"></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LOGIN DIALOG -->
+  <dialog id="dlgLogin">
+    <form method="dialog" id="formLogin">
+      <h3>Admin login</h3>
+      <p class="muted small">Sign in with a GitHub access token that has write access to this site's repository.
+        Students and visitors don't need to log in — the page is view-only for them.</p>
+      <label>Repository (owner/repo)<input id="loginRepo" required placeholder="username/ruas-placements" /></label>
+      <label>GitHub access token<input id="loginToken" type="password" required autocomplete="off" placeholder="github_pat_…" /></label>
+      <label class="check"><input id="loginRemember" type="checkbox" /> Remember on this device</label>
+      <p id="loginErr" class="err"></p>
+      <div class="dlg-actions">
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn" id="btnDoLogin">Log in</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- COMPANY DIALOG -->
+  <dialog id="dlgCompany">
+    <form method="dialog" id="formCompany">
+      <h3 id="companyTitle">Company</h3>
+      <div class="grid2">
+        <label>Company name*<input name="name" required /></label>
+        <label>Role<input name="role" /></label>
+        <label>Type
+          <select name="type"><option>Full-time</option><option>Internship</option><option>Internship + Full-time</option></select>
+        </label>
+        <label>Status
+          <select name="status">
+            <option>Upcoming</option><option>Registration Open</option><option>Registration Closed</option>
+            <option>In Progress</option><option>Results Announced</option><option>Completed</option>
+          </select>
+        </label>
+        <label>CTC / Stipend<input name="ctc" placeholder="₹ 8 LPA" /></label>
+        <label>Location<input name="location" /></label>
+        <label>Batch<input name="batch" placeholder="2027" /></label>
+        <label>Mode<input name="mode" placeholder="On campus / Virtual" /></label>
+        <label>Registration deadline<input name="regDeadline" type="date" /></label>
+        <label>Registration link<input name="regLink" type="url" placeholder="https://…" /></label>
+        <label>Online assessment date<input name="oaDate" type="date" /></label>
+        <label>Interview date<input name="interviewDate" type="date" /></label>
+      </div>
+      <label>Eligibility<input name="eligibility" placeholder="CGPA ≥ 7.0, no active backlogs" /></label>
+      <fieldset>
+        <legend>Eligible branches</legend>
+        <div id="branchChecks" class="checks"></div>
+        <input name="otherBranches" placeholder="Other branches, comma separated" />
+      </fieldset>
+      <label>Notes<textarea name="notes" rows="3"></textarea></label>
+      <div class="dlg-actions">
+        <button type="button" class="btn danger" id="btnDeleteCompany">Delete</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ANNOUNCEMENT DIALOG -->
+  <dialog id="dlgNews">
+    <form method="dialog" id="formNews">
+      <h3>Announcement</h3>
+      <label>Title*<input name="title" required /></label>
+      <label>Date<input name="date" type="date" /></label>
+      <label>Details<textarea name="body" rows="4"></textarea></label>
+      <label class="check"><input name="pinned" type="checkbox" /> Pin to top</label>
+      <div class="dlg-actions">
+        <button type="button" class="btn danger" id="btnDeleteNews">Delete</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- STATS DIALOG -->
+  <dialog id="dlgStats">
+    <form method="dialog" id="formStats">
+      <h3>Placement statistics</h3>
+      <div class="grid2">
+        <label>Companies visited<input name="companies" /></label>
+        <label>Offers<input name="offers" /></label>
+        <label>Highest CTC<input name="highestCtc" /></label>
+        <label>Average CTC<input name="averageCtc" /></label>
+      </div>
+      <div class="dlg-actions">
+        <span class="spacer"></span>
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button type="submit" class="btn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>
