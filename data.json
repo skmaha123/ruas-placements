@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T10:55:55.796Z",
+  "updated": "2026-11-21T11:04:41.922Z",
   "stats": {
     "companies": "0",
     "offers": "0",
@@ -37,6 +37,24 @@
       "regDeadline": "2026-12-05",
       "regLink": "",
       "oaDate": "2026-12-12",
+      "interviewDate": "",
+      "mode": "",
+      "notes": ""
+    },
+    {
+      "id": "cu88cpzyl",
+      "name": "Sasken",
+      "role": "",
+      "type": "Full-time",
+      "ctc": "10 LP",
+      "location": "",
+      "branches": [],
+      "eligibility": "",
+      "batch": "",
+      "status": "Upcoming",
+      "regDeadline": "2026-11-30",
+      "regLink": "",
+      "oaDate": "2026-11-28",
       "interviewDate": "",
       "mode": "",
       "notes": ""
