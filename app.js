@@ -197,7 +197,11 @@ async function gh(path, opts = {}) {
     headers: { Accept: "application/vnd.github+json", Authorization: `Bearer ${admin.token}`, ...(opts.headers || {}) },
   });
   const body = res.status === 204 ? null : await res.json().catch(() => null);
-  if (!res.ok) throw new Error((body && body.message) || `GitHub error ${res.status}`);
+  if (!res.ok) {
+    const err = new Error((body && body.message) || `GitHub error ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
   return body;
 }
 
@@ -215,10 +219,41 @@ async function login(repo, token, remember) {
     throw new Error(/Bad credentials/i.test(e.message) ? "Invalid token." : e.message);
   }
   store.set("ruas_admin", JSON.stringify({ owner, repo: name, token: admin.token }), remember);
-  enterAdmin();
+  await enterAdmin();
 }
 
-function enterAdmin() {
+function fromBase64Utf8(b64) {
+  const bin = atob(b64.replace(/\s/g, ""));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+/* Admins always edit the newest data.json in the repository (the public site can lag ~1 min behind) */
+async function loadLatestFromRepo() {
+  try {
+    const branch = CFG.githubBranch || "main";
+    const f = await gh(`/repos/${admin.owner}/${admin.repo}/contents/data.json?ref=${encodeURIComponent(branch)}&t=${Date.now()}`);
+    const d = JSON.parse(fromBase64Utf8(f.content));
+    d.stats ||= {}; d.announcements ||= []; d.companies ||= [];
+    data = d;
+  } catch (e) { console.warn("Could not load data.json from repository", e); }
+}
+
+function explainPublishError(e) {
+  if (e.status === 403 || /not accessible|permission/i.test(e.message))
+    return "Your GitHub token is not allowed to WRITE to this repository. On GitHub open Settings → Developer settings → Fine-grained tokens → your token → Edit: set Repository access to 'Only select repositories' → ruas-placements, and Permissions → Contents → 'Read and write'. Save, then log out and log in here again.";
+  if (e.status === 404)
+    return "The token cannot see this repository. Edit the token on GitHub and add this repository under 'Repository access'.";
+  if (e.status === 401)
+    return "The token is invalid or has expired. Create a new token and log in again.";
+  if (e.status === 409 || e.status === 422)
+    return "The data changed on GitHub while you were editing. Your edits are kept here — click Publish changes again.";
+  return e.message;
+}
+
+async function enterAdmin() {
+  if (!dirty) await loadLatestFromRepo();
   $("adminBar").hidden = false;
   $("btnLogin").hidden = true;
   $("adminUser").textContent = admin.login ? `· ${admin.login}` : "";
@@ -261,9 +296,12 @@ async function publish() {
       }),
     });
     dirty = false; renderAll();
-    toast("Published ✓ — the public page updates in about a minute.", 5000);
+    $("pending").textContent = `✓ Published at ${new Date().toLocaleTimeString("en-IN")} — visible to everyone in 1–2 minutes (press Ctrl+F5 to refresh).`;
+    toast("Published ✓", 4000);
   } catch (e) {
-    toast("Publish failed: " + e.message, 6000);
+    const msg = explainPublishError(e);
+    $("pending").textContent = "✗ Not published. " + msg;
+    alert("Publish failed — nothing was saved to the website.\n\n" + msg);
   } finally {
     btn.disabled = false; btn.textContent = "Publish changes";
   }
@@ -418,7 +456,7 @@ function wire() {
       if (!r.permissions || !r.permissions.push) throw new Error("no access");
       const u = await gh("/user").catch(() => null);
       admin.login = u ? u.login : s.owner;
-      enterAdmin();
+      await enterAdmin();
     } catch { admin = null; store.del("ruas_admin"); }
   }
 })();

@@ -31,7 +31,7 @@ nav a:hover { color: #fff; }
 .adminbar { background: #fff6e0; border-bottom: 1px solid #f0d9a0; position: sticky; top: 58px; z-index: 19; }
 .adminbar-in { display: flex; align-items: center; gap: 12px; padding: 8px 18px; flex-wrap: wrap; font-size: .9rem; }
 .adminbar-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; }
-.pending { color: #a15c00; font-weight: 600; }
+.pending { color: #a15c00; font-weight: 600; flex-basis: 100%; order: 3; }
 
 /* hero */
 .hero { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: #fff; padding: 36px 0 30px; }
