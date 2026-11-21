@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T10:00:00.000Z",
+  "updated": "2026-11-21T10:55:55.796Z",
   "stats": {
     "companies": "0",
     "offers": "0",
@@ -13,7 +13,33 @@
       "title": "Welcome to the RUAS placement portal (sample)",
       "body": "This is sample content. Log in as admin to replace it with real announcements and drives.",
       "pinned": true
+    },
+    {
+      "id": "ayoa2j0zg",
+      "title": "Placement Drive in Progress",
+      "date": "2026-11-21",
+      "body": "",
+      "pinned": false
     }
   ],
-  "companies": []
+  "companies": [
+    {
+      "id": "cookkjjlb",
+      "name": "Infosys",
+      "role": "",
+      "type": "Full-time",
+      "ctc": "",
+      "location": "",
+      "branches": [],
+      "eligibility": "",
+      "batch": "",
+      "status": "Upcoming",
+      "regDeadline": "2026-12-05",
+      "regLink": "",
+      "oaDate": "2026-12-12",
+      "interviewDate": "",
+      "mode": "",
+      "notes": ""
+    }
+  ]
 }
