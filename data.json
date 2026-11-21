@@ -15,42 +15,5 @@
       "pinned": true
     }
   ],
-  "companies": [
-    {
-      "id": "c1",
-      "name": "Sample Company A",
-      "role": "Software Engineer",
-      "type": "Full-time",
-      "ctc": "₹ 8 LPA",
-      "location": "Bengaluru",
-      "branches": ["B.Tech CSE", "B.Tech AI & ML", "B.Tech ISE"],
-      "eligibility": "CGPA ≥ 7.0, no active backlogs",
-      "batch": "2027",
-      "status": "Registration Open",
-      "regDeadline": "2026-11-28",
-      "regLink": "",
-      "oaDate": "2026-12-02",
-      "interviewDate": "2026-12-05",
-      "mode": "On campus",
-      "notes": "Sample entry — edit or delete it from the admin view."
-    },
-    {
-      "id": "c2",
-      "name": "Sample Company B",
-      "role": "Graduate Engineer Trainee",
-      "type": "Internship + Full-time",
-      "ctc": "Stipend ₹ 25,000/month · ₹ 6 LPA",
-      "location": "Pune",
-      "branches": ["B.Tech Mechanical", "B.Tech Automotive", "B.Tech Aerospace"],
-      "eligibility": "CGPA ≥ 6.5",
-      "batch": "2027",
-      "status": "Upcoming",
-      "regDeadline": "2026-12-10",
-      "regLink": "",
-      "oaDate": "",
-      "interviewDate": "2026-12-15",
-      "mode": "Virtual",
-      "notes": ""
-    }
-  ]
+  "companies": []
 }
