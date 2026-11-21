@@ -13,15 +13,12 @@ window.SITE_CONFIG = {
   githubRepo: "",
   githubBranch: "main",
 
-  // Programmes / branches shown in the filter and the admin form
-  branches: [
-    "B.Tech CSE", "B.Tech AI & ML", "B.Tech ISE", "B.Tech ECE", "B.Tech EEE",
-    "B.Tech Mechanical", "B.Tech Civil", "B.Tech Aerospace", "B.Tech Automotive",
-    "B.Tech Robotics", "M.Tech", "MCA", "MBA", "B.Pharm", "B.Des", "B.Sc", "B.Com",
-  ],
+  // Optional: branches to show as tick-boxes in the admin form.
+  // Leave empty — branches typed in by the admin are picked up automatically.
+  branches: [],
 
   contact: {
-    email: "placements@example.edu",
+    email: "",
     phone: "+91 00000 00000",
     address: "Directorate of Training and Placement, RUAS, Bengaluru",
   },

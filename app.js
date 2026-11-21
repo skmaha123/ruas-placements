@@ -70,8 +70,6 @@ function renderStatic() {
   $("footPhone").textContent = c.phone ? "☎ " + c.phone : "";
   document.title = `${CFG.shortName || "RUAS"} ${CFG.season || "Placements"} | ${CFG.department || ""}`;
 
-  const fb = $("fBranch");
-  (CFG.branches || []).forEach(b => fb.insertAdjacentHTML("beforeend", `<option>${esc(b)}</option>`));
 
   $("statusChips").innerHTML = ["All", ...STATUSES]
     .map(s => `<button class="chip${s === "All" ? " on" : ""}" data-s="${s === "All" ? "" : esc(s)}">${esc(s)}</button>`).join("");
@@ -84,7 +82,20 @@ function renderStatic() {
   ["q", "fBranch", "fType"].forEach(id => $(id).addEventListener("input", renderCards));
 }
 
+function allBranches() {
+  const set = new Set(CFG.branches || []);
+  data.companies.forEach(c => (c.branches || []).forEach(b => set.add(b)));
+  return [...set].sort((x, y) => x.localeCompare(y));
+}
+
+function renderBranchFilter() {
+  const fb = $("fBranch"), cur = fb.value;
+  fb.innerHTML = `<option value="">All branches</option>` + allBranches().map(b => `<option>${esc(b)}</option>`).join("");
+  fb.value = allBranches().includes(cur) ? cur : "";
+}
+
 function renderAll() {
+  renderBranchFilter();
   renderStats(); renderNews(); renderCards(); renderTimeline();
   $("updated").textContent = data.updated ? "Last updated: " + new Date(data.updated).toLocaleString("en-IN") : "";
   $("pending").textContent = dirty ? "● Unpublished changes" : "";
@@ -275,9 +286,10 @@ function openCompany(id) {
   f.reset();
   $("companyTitle").textContent = c ? `Edit ${c.name}` : "Add company";
   $("btnDeleteCompany").hidden = !c;
-  const known = CFG.branches || [];
+  const known = allBranches();
   $("branchChecks").innerHTML = known.map(b =>
     `<label><input type="checkbox" value="${esc(b)}" ${c && (c.branches || []).includes(b) ? "checked" : ""}/> ${esc(b)}</label>`).join("");
+  $("branchChecks").hidden = !known.length;
   if (c) {
     for (const k of ["name", "role", "type", "status", "ctc", "location", "batch", "mode", "regDeadline", "regLink", "oaDate", "interviewDate", "eligibility", "notes"]) {
       if (f.elements[k]) f.elements[k].value = c[k] || "";
