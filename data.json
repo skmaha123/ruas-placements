@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T11:08:43.721Z",
+  "updated": "2026-11-26T07:15:27.509Z",
   "stats": {
     "companies": "1",
     "offers": "4",
@@ -57,6 +57,26 @@
       "oaDate": "2026-11-28",
       "interviewDate": "",
       "mode": "",
+      "notes": ""
+    },
+    {
+      "id": "cek3z0vgb",
+      "name": "Ecolab",
+      "role": "Software Engineer",
+      "type": "Internship + Full-time",
+      "ctc": "9 LPA",
+      "location": "Bangalore",
+      "branches": [
+        "CSE and Allied Branches"
+      ],
+      "eligibility": "CGPA>7.0 with no active backlog",
+      "batch": "2027",
+      "status": "Registration Closed",
+      "regDeadline": "",
+      "regLink": "",
+      "oaDate": "",
+      "interviewDate": "2026-12-04",
+      "mode": "On campus",
       "notes": ""
     }
   ]
